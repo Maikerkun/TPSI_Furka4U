@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="${header}"></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1 th:text="${header}"></h1>
+    <form th:action="${action}" method="POST" th:object="${offer}" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Tytuł:</label>
+            <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{title}')?'has-error':''}">
+                <input type="text" th:field="*{title}" class="form-control"/>
+                <div th:classappend="${#fields.hasErrors('*{title}')?'invalid-feedback':'hidden'}">Pole nie może być puste oraz tytuł powinien zawierać od 5 do 255 znaków</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Rocznik:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{year}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{year}"/>
+                <div th:classappend="${#fields.hasErrors('*{year}')?'invalid-feedback':'hidden'}">Pole nie może być puste oraz rocznik musi być nie starszy niż 1900</div>
+            </div>
+            <label class="col-sm-2 control-label">Przebieg:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{mileage}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{mileage}"/>
+                <div th:classappend="${#fields.hasErrors('*{mileage}')?'invalid-feedback':'hidden'}">Przebieg nie może być pusty oraz ujemny</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Pojemność silnika:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{engineSize}')?'has-error':''}">
+                <input type="number" step="0.1" class="form-control" th:field="*{engineSize}"/>
+                <div th:classappend="${#fields.hasErrors('*{engineSize}')?'invalid-feedback':'hidden'}">Pojemność nie może być pusta oraz ujemne</div>
+            </div>
+            <label class="col-sm-2 control-label">Moc silnika:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{enginePower}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{enginePower}"/>
+                <div th:classappend="${#fields.hasErrors('*{enginePower}')?'invalid-feedback':'hidden'}">Moc silnika nie może być pusta oraz ujemna</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Liczba drzwi:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{doors}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{doors}"/>
+                <div th:classappend="${#fields.hasErrors('*{doors}')?'invalid-feedback':'hidden'}">Pole nie może być puste oraz należy wpisać liczbę drzwi od 1 do 5</div>
+            </div>
+            <label class="col-sm-2 control-label">Kolor:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{colour}')?'has-error':''}">
+                <input type="text" class="form-control" th:field="*{colour}"/>
+                <div th:classappend="${#fields.hasErrors('*{colour}')?'invalid-feedback':'hidden'}">Pole nie może być puste oraz nazwa koloru musi składać się od 3 do 30 znaków</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Model:</label>
+            <div class="col-sm-10">
+                <select class="form-control" th:field="*{model.Id}">
+                    <option th:each="md : ${carModels}" th:value="${md.id}" th:text="|${md.manufacturer.name} ${md.name}|"></option>
+
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Nadwozie:</label>
+            <div class="col-sm-4">
+                <select class="form-control" th:field="*{bodyStyle.id}">
+                    <option th:each="bs : ${bodyStyles}" th:value="${bs.id}" th:text="${bs.name}"></option>
+                </select>
+            </div>
+            <label class="col-sm-2 control-label">Rodzaj paliwa:</label>
+            <div class="col-sm-4">
+                <select class="form-control" th:field="*{fuelType.Id}">
+                    <option th:each="fuel : ${fuelTypes}" th:value="${fuel.id}" th:text="${fuel.name}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Cena:</label>
+            <div class="col-sm-4" th:classappend="${#fields.hasErrors('*{price}')?'has-error':''}">
+                <input type="number" class="form-control" th:field="*{price}"/>
+                <div th:classappend="${#fields.hasErrors('*{price}')?'invalid-feedback':'hidden'}">Pole nie może być puste oraz ujemne</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Opis:</label>
+            <div class="col-sm-10" th:classappend="${#fields.hasErrors('*{description}')?'has-error':''}">
+                <textarea class="form-control" rows="5" th:field="*{description}"/>
+                <div th:classappend="${#fields.hasErrors('*{description}')?'invalid-feedback':'hidden'}">Pole nie może być puste oraz musi zawierać od 5 do 65535 znaków</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <input type="hidden" th:field="*{id}" />
+            <div class="col-sm-4">
+                <input type="submit" value="Zapisz" class="form-control btn btn-primary"/>
+            </div>
+            <div class="col-sm-4">
+                <a href="/" class="btn btn-default">Anuluj</a>
+            </div>
+        </div>
+    </form>
+</section>
+</body>
+</html>
